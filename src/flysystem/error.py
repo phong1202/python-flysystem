@@ -53,6 +53,11 @@ class FilesystemOperationFailed(Enum):
     OPERATION_SET_VISIBILITY = "SET_VISIBILITY"
     OPERATION_LIST_CONTENTS = "LIST_CONTENTS"
     OPERATION_TEMPORARY_URL = "TEMPORARY_URL"
+    OPERATION_DOWNLOAD = "DOWNLOAD"
+    OPERATION_DOWNLOAD_DIRECTORY = "DOWNLOAD_DIRECTORY"
+    OPERATION_UPLOAD = "UPLOAD"
+    OPERATION_UPLOAD_DIRECTORY = "UPLOAD_DIRECTORY"
+    OPERATION_CONNECT_GOOGLE_DRIVE = "CONNECT_GOOGLE_DRIVE"
 
 
 class UnableToOperateToFile(FlyFilesystemException):
@@ -206,6 +211,54 @@ class UnableToGenerateTemporaryUrl(UnableToOperateToFile):
         msg = f"Unable to generate pre-signed url from location: {location}. {reason}".rstrip()
         this = cls(msg)
         this._operation = FilesystemOperationFailed.OPERATION_TEMPORARY_URL.value
+        this._location = location
+        this._reason = reason
+        return this
+
+
+@final
+class UnableToFindDriveToken(UnableToOperateToFile):
+    @classmethod
+    def with_location(cls, location: str, reason: str = "") -> Self:
+        msg = f"Unable to get the credential token from location: {location}. {reason}".rstrip()
+        this = cls(msg)
+        this._operation = FilesystemOperationFailed.OPERATION_CONNECT_GOOGLE_DRIVE.value
+        this._location = location
+        this._reason = reason
+        return this
+
+
+@final
+class UnableToReadCredentialFile(UnableToOperateToFile):
+    @classmethod
+    def with_location(cls, location: str, reason: str = "") -> Self:
+        msg = f"Unable to read the credential file from location: {location}. {reason}".rstrip()
+        this = cls(msg)
+        this._operation = FilesystemOperationFailed.OPERATION_CONNECT_GOOGLE_DRIVE.value
+        this._location = location
+        this._reason = reason
+        return this
+
+
+@final
+class UnableToDownload(UnableToOperateToFile):
+    @classmethod
+    def with_location(cls, location: str, reason: str = "") -> Self:
+        msg = f"Unable to download resource from location: {location}. {reason}".rstrip()
+        this = cls(msg)
+        this._operation = FilesystemOperationFailed.OPERATION_DOWNLOAD.value
+        this._location = location
+        this._reason = reason
+        return this
+
+
+@final
+class UnableToUpload(UnableToOperateToFile):
+    @classmethod
+    def with_location(cls, location: str, reason: str = "") -> Self:
+        msg = f"Unable to upload resource from location: {location}. {reason}".rstrip()
+        this = cls(msg)
+        this._operation = FilesystemOperationFailed.OPERATION_UPLOAD.value
         this._location = location
         this._reason = reason
         return this

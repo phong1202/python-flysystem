@@ -42,7 +42,7 @@ class FilesystemReader(metaclass=ABCMeta):
         Arguments:
             path: The directory or file path
         Returns:
-            True if the directory exsited
+            True if the directory existed
         """
 
     @abstractmethod
@@ -58,7 +58,7 @@ class FilesystemReader(metaclass=ABCMeta):
     @abstractmethod
     def read_stream(self, path: str) -> IO:
         """
-        Read the contents of a file as tream
+        Read the contents of a file as stream
         Arguments:
             path: The file path
         Returns:
